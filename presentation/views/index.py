@@ -1,5 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
+import presentation.views.registrar_paciente as registrar_paciente
+
+from presentation.views.not_implemented import show_error
 
 def show():
     window = tk.Tk()
@@ -17,19 +20,23 @@ def show():
     y = (window.winfo_screenheight() // 2) - (height // 2)
     window.geometry('{}x{}+{}+{}'.format(width, height, x, y))
 
+    def goto_register_patient():
+        window.destroy()
+        registrar_paciente.show()
+
     title_label = ttk.Label(window, text='Escoja que desea hacer', font=('Arial', 16))
     title_label.pack(pady=20)
 
-    button_1 = ttk.Button(window, text='Registrar paciente', command=lambda: print('Registrar paciente'))
+    button_1 = ttk.Button(window, text='Registrar paciente', command=goto_register_patient)
     button_1.pack(pady=10, fill='x', padx=40, ipady=20)
 
-    button_2 = ttk.Button(window, text='Buscar paciente', command=lambda: print('Buscar paciente'))
+    button_2 = ttk.Button(window, text='Buscar paciente', command=show_error)
     button_2.pack(pady=10, fill='x', padx=40, ipady=20)
 
-    button_3 = ttk.Button(window, text='Registrar cita', command=lambda: print('Registrar cita'))
+    button_3 = ttk.Button(window, text='Registrar cita', command=show_error)
     button_3.pack(pady=10, fill='x', padx=40, ipady=20)
 
-    button_4 = ttk.Button(window, text='Consultar historial', command=lambda: print('Consultar historial'))
+    button_4 = ttk.Button(window, text='Consultar historial', command=show_error)
     button_4.pack(pady=10, fill='x', padx=40, ipady=20)
 
     window.mainloop()

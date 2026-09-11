@@ -1,3 +1,4 @@
+# Singleton
 class Business:
     __instance = None
 
