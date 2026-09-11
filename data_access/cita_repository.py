@@ -15,3 +15,10 @@ class CitaRepository(Repository):
                 FOREIGN KEY (paciente_id) REFERENCES pacientes (id)
             )
         ''')
+
+    def add_cita(self, paciente_id, fecha, hora, motivo):
+        self.data_access.cursor.execute('''
+            INSERT INTO citas (paciente_id, fecha, hora, motivo)
+            VALUES (?, ?, ?, ?)
+        ''', (paciente_id, fecha, hora, motivo))
+        self.data_access.commit()

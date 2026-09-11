@@ -31,6 +31,10 @@ def show():
         window.destroy()
         buscar_paciente.show()
 
+    def goto_register_appointment():
+        window.destroy()
+        registrar_cita.show()
+
     title_label = ttk.Label(window, text='Escoja que desea hacer', font=('Arial', 16))
     title_label.pack(pady=20)
 
@@ -40,7 +44,7 @@ def show():
     button_2 = ttk.Button(window, text='Buscar paciente', command=goto_search_patient)
     button_2.pack(pady=10, fill='x', padx=40, ipady=20)
 
-    button_3 = ttk.Button(window, text='Registrar cita', command=show_error)
+    button_3 = ttk.Button(window, text='Registrar cita', command=goto_register_appointment)
     button_3.pack(pady=10, fill='x', padx=40, ipady=20)
 
     button_4 = ttk.Button(window, text='Consultar historial', command=show_error)
