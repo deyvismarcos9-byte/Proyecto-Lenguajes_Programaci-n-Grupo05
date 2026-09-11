@@ -41,6 +41,28 @@ Proyecto-Lenguajes_Programaci-n-Grupo05/
 └── .gitignore
 ```
 
+## Arquitectura del sistema
+
+El sistema utiliza una arquitectura organizada por capas, con el propósito de separar las responsabilidades de cada componente y facilitar el mantenimiento y evolución de la aplicación.
+
+### Presentación (`presentation/`)
+
+Contiene la interfaz gráfica desarrollada con Tkinter. Esta capa permite la interacción del usuario con el sistema mediante las diferentes vistas disponibles, como el registro y búsqueda de pacientes, registro de citas y consulta del historial clínico.
+
+### Lógica de negocio (`business/`)
+
+Esta capa concentra las reglas y validaciones relacionadas con los procesos del sistema. Su separación permite mantener la lógica de negocio independiente de la interfaz gráfica.
+
+### Acceso a datos (`data_access/`)
+
+Se encarga de gestionar la comunicación entre la lógica de negocio y la información almacenada. Esta separación permite organizar las operaciones de consulta, registro y actualización de datos.
+
+### Persistencia (`database/`)
+
+Contiene los recursos relacionados con el almacenamiento de la información del sistema, permitiendo centralizar los datos necesarios para la gestión de pacientes, citas y consultas.
+
+Esta organización permite reducir el acoplamiento entre componentes y facilita futuras modificaciones o ampliaciones del sistema.
+
 ## Requisitos
 
 - Python 3.8 o superior
