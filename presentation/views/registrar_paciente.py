@@ -58,7 +58,7 @@ def show():
             return
 
         data_access = DataAccess()
-        data_access.add_paciente(
+        data_access.paciente_repository.add_paciente(
             datos['dni'],
             datos['nombre'],
             datos['apellido'],

@@ -1,4 +1,5 @@
 import sqlite3
+from data_access.repository_factory import RepositoryFactory
 
 # Singleton
 class DataAccess:
@@ -11,9 +12,16 @@ class DataAccess:
 
     def __init__(self) -> None:
         self.__connection = sqlite3.connect('database/database.db')
-        self.pacientes_cursor = self.__connection.cursor()
+        self.cursor = self.__connection.cursor()
 
-        self.pacientes_cursor.execute('''
+        self.repository_factory = RepositoryFactory(self)
+        self.paciente_repository = self.repository_factory.get_paciente_repository()
+        self.historia_repository = self.repository_factory.get_historia_repository()
+        self.cita_repository = self.repository_factory.get_cita_repository()
+        self.atencion_repository = self.repository_factory.get_atencion_repository()
+
+        # Crear la tabla de pacientes si no existe
+        self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS pacientes (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 dni TEXT NOT NULL,
@@ -25,13 +33,9 @@ class DataAccess:
             )
         ''')
 
-        self.__connection.commit()
+        self.commit()
 
-    def add_paciente(self, dni, nombre, apellido, fecha_nacimiento, direccion, telefono):
-        self.pacientes_cursor.execute('''
-            INSERT INTO pacientes (dni, nombre, apellido, fecha_nacimiento, direccion, telefono)
-            VALUES (?, ?, ?, ?, ?, ?)
-        ''', (dni, nombre, apellido, fecha_nacimiento, direccion, telefono))
+    def commit(self):
         self.__connection.commit()
 
     def close_connection(self):
