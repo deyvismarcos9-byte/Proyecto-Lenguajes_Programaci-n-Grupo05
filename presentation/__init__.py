@@ -1,1 +1,5 @@
 import presentation.views.index as index
+import presentation.views.registrar_paciente as registrar_paciente
+import presentation.views.buscar_paciente as buscar_paciente
+import presentation.views.registrar_cita as registrar_cita
+import presentation.views.consultar_historial as consultar_historial

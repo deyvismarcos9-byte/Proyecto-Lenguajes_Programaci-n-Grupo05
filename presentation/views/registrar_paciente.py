@@ -72,7 +72,7 @@ def show():
         for value in entries.values():
             value.set('')
 
-    def volver_al_inicio():
+    def goto_index():
         window.destroy()
         index.show()
 
@@ -80,6 +80,6 @@ def show():
     buttons_frame.pack(pady=(10, 25))
 
     ttk.Button(buttons_frame, text='Guardar', command=guardar_paciente).pack(side='left', padx=10)
-    ttk.Button(buttons_frame, text='Volver', command=volver_al_inicio).pack(side='left', padx=10)
+    ttk.Button(buttons_frame, text='Volver', command=goto_index).pack(side='left', padx=10)
 
     window.mainloop()

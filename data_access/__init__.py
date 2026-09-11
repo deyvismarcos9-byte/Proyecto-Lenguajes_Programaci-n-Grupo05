@@ -18,22 +18,6 @@ class DataAccess:
         self.paciente_repository = self.repository_factory.get_paciente_repository()
         self.historia_repository = self.repository_factory.get_historia_repository()
         self.cita_repository = self.repository_factory.get_cita_repository()
-        self.atencion_repository = self.repository_factory.get_atencion_repository()
-
-        # Crear la tabla de pacientes si no existe
-        self.cursor.execute('''
-            CREATE TABLE IF NOT EXISTS pacientes (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                dni TEXT NOT NULL,
-                nombre TEXT NOT NULL,
-                apellido TEXT NOT NULL,
-                fecha_nacimiento TEXT NOT NULL,
-                direccion TEXT NOT NULL,
-                telefono TEXT NOT NULL
-            )
-        ''')
-
-        self.commit()
 
     def commit(self):
         self.__connection.commit()
