@@ -57,28 +57,30 @@ def show():
     def buscar_paciente():
         dni = entries['DNI'][0].get().strip()
         if not dni:
+            messagebox.showwarning('Datos incompletos', 'Debe ingresar un DNI para buscar al paciente.')
             return
 
-        data_access = DataAccess()
-        paciente = data_access.paciente_repository.get_paciente_by_dni(dni)
+        try:
+            data_access = DataAccess()
+            paciente = data_access.paciente_repository.get_paciente_by_dni(dni)
 
-        if paciente:
-            # Mostrar los datos del paciente en los campos correspondientes
-            entries['ID'][0].set(paciente[0])
-            entries['Nombre'][0].set(paciente[2])
-            entries['Apellido'][0].set(paciente[3])
-            entries['Fecha de nacimiento'][0].set(paciente[4])
-            entries['Dirección'][0].set(paciente[5])
-            entries['Teléfono'][0].set(paciente[6])
-        else:
-            # Mostrar mensaje si no se encuentra el paciente
-            messagebox.showinfo("Paciente no encontrado", f"No se encontró un paciente con DNI: {dni}")
-            entries['ID'][0].set('')
-            entries['Nombre'][0].set('')
-            entries['Apellido'][0].set('')
-            entries['Fecha de nacimiento'][0].set('')
-            entries['Dirección'][0].set('')
-            entries['Teléfono'][0].set('')
+            if paciente:
+                entries['ID'][0].set(paciente[0])
+                entries['Nombre'][0].set(paciente[2])
+                entries['Apellido'][0].set(paciente[3])
+                entries['Fecha de nacimiento'][0].set(paciente[4])
+                entries['Dirección'][0].set(paciente[5])
+                entries['Teléfono'][0].set(paciente[6])
+            else:
+                messagebox.showinfo("Paciente no encontrado", f"No se encontró un paciente con DNI: {dni}")
+                entries['ID'][0].set('')
+                entries['Nombre'][0].set('')
+                entries['Apellido'][0].set('')
+                entries['Fecha de nacimiento'][0].set('')
+                entries['Dirección'][0].set('')
+                entries['Teléfono'][0].set('')
+        except Exception as exc:
+            messagebox.showerror('Error al buscar paciente', f'Ocurrió un error al consultar los datos: {exc}')
 
     def goto_index():
         window.destroy()
