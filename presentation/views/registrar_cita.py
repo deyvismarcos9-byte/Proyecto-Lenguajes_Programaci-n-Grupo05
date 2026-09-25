@@ -28,7 +28,7 @@ def show():
     form_frame.pack(fill='both', expand=True, padx=30)
 
     fields = [
-        ('ID Paciente', 'id_paciente'),
+        ('DNI del paciente', 'dni_paciente'),
         ('Fecha de cita', 'fecha_cita'),
         ('Hora de cita', 'hora_cita'),
         ('Motivo de la cita', 'motivo_cita'),
@@ -48,7 +48,7 @@ def show():
         entry.pack(side='left', fill='x', expand=True)
         entries[key] = var
 
-    def guardar_paciente():
+    def guardar_cita():
         datos = {key: value.get().strip() for key, value in entries.items()}
 
         if any(not valor for valor in datos.values()):
@@ -56,8 +56,16 @@ def show():
             return
 
         data_access = DataAccess()
+        paciente = data_access.paciente_repository.get_paciente_by_dni(datos['dni_paciente'])
+        if paciente is None:
+            messagebox.showerror(
+                'Paciente no encontrado',
+                f'No existe un paciente registrado con el DNI {datos["dni_paciente"]}.'
+            )
+            return
+
         data_access.cita_repository.add_cita(
-            datos['id_paciente'],
+            paciente[0],
             datos['fecha_cita'],
             datos['hora_cita'],
             datos['motivo_cita']
@@ -75,7 +83,7 @@ def show():
     buttons_frame = ttk.Frame(window)
     buttons_frame.pack(pady=(10, 25))
 
-    ttk.Button(buttons_frame, text='Guardar', command=guardar_paciente).pack(side='left', padx=10)
+    ttk.Button(buttons_frame, text='Guardar', command=guardar_cita).pack(side='left', padx=10)
     ttk.Button(buttons_frame, text='Volver', command=goto_index).pack(side='left', padx=10)
 
     window.mainloop()
