@@ -63,7 +63,7 @@ def show(data_access):
             return
 
         window.destroy()
-        index.show()
+        index.show(data_access)
 
     ttk.Button(content, text=button_text, command=submit).pack(fill='x', pady=(8, 0), ipady=5)
     window.bind('<Return>', submit)

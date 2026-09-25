@@ -4,10 +4,13 @@ import presentation.views.registrar_paciente as registrar_paciente
 import presentation.views.buscar_paciente as buscar_paciente
 import presentation.views.registrar_cita as registrar_cita
 import presentation.views.consultar_historial as consultar_historial
+import presentation.views.login as login
+from data_access import DataAccess
 
-from presentation.views.not_implemented import show_error
+def show(data_access=None):
+    if data_access is None:
+        data_access = DataAccess()
 
-def show():
     window = tk.Tk()
     window.title('Programa de Gestión del Centro de Salud Ganímedes')
     window.geometry('640x480')
@@ -35,8 +38,18 @@ def show():
         window.destroy()
         registrar_cita.show()
 
-    title_label = ttk.Label(window, text='Escoja que desea hacer', font=('Arial', 16))
-    title_label.pack(pady=20)
+    def goto_consult_history():
+        window.destroy()
+        consultar_historial.show(data_access)
+
+    def logout():
+        window.destroy()
+        login.show(data_access)
+
+    header = ttk.Frame(window, padding=(24, 16, 24, 4))
+    header.pack(fill='x')
+    ttk.Label(header, text='Escoja que desea hacer', font=('Arial', 16)).pack(side='left')
+    ttk.Button(header, text='Cerrar sesión', command=logout).pack(side='right')
 
     button_1 = ttk.Button(window, text='Registrar paciente', command=goto_register_patient)
     button_1.pack(pady=10, fill='x', padx=40, ipady=20)
@@ -47,7 +60,7 @@ def show():
     button_3 = ttk.Button(window, text='Registrar cita', command=goto_register_appointment)
     button_3.pack(pady=10, fill='x', padx=40, ipady=20)
 
-    button_4 = ttk.Button(window, text='Consultar historial', command=show_error)
+    button_4 = ttk.Button(window, text='Consultar historial', command=goto_consult_history)
     button_4.pack(pady=10, fill='x', padx=40, ipady=20)
 
     window.mainloop()

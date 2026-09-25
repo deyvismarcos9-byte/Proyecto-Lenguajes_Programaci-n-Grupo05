@@ -22,3 +22,12 @@ class CitaRepository(Repository):
             VALUES (?, ?, ?, ?)
         ''', (paciente_id, fecha, hora, motivo))
         self.data_access.commit()
+
+    def get_citas_by_paciente_id(self, paciente_id):
+        self.data_access.cursor.execute('''
+            SELECT id, fecha, hora, motivo
+            FROM citas
+            WHERE paciente_id = ?
+            ORDER BY fecha ASC, hora ASC
+        ''', (paciente_id,))
+        return self.data_access.cursor.fetchall()
