@@ -18,6 +18,7 @@ class DataAccess:
         self.paciente_repository = self.repository_factory.get_paciente_repository()
         self.historia_repository = self.repository_factory.get_historia_repository()
         self.cita_repository = self.repository_factory.get_cita_repository()
+        self.usuario_repository = self.repository_factory.get_usuario_repository()
 
     def commit(self):
         self.__connection.commit()
