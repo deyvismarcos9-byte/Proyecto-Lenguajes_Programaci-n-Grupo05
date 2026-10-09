@@ -1,101 +1,150 @@
-# Proyecto Lenguajes de Programación - Grupo 05
+# Sistema de Gestión del Centro de Salud Ganimedes
 
-Aplicación de escritorio para la gestión de pacientes, citas y consultas del Centro de Salud Ganímedes.
+Aplicación de escritorio desarrollada con Java y Swing para administrar
+información básica de un centro de salud. Incluye inicio de sesión y módulos
+para gestionar personal médico, pacientes, citas, medicamentos, recetas y usuarios.
 
-## Descripción
+> **Aviso:** es una aplicación de ejemplo con persistencia local en archivos
+de texto. Los nombres de usuario y las contraseñas se almacenan sin cifrar;
+no uses datos personales o clínicos reales en un entorno no protegido.
 
-Este proyecto está desarrollado en Python con interfaz gráfica mediante Tkinter y está organizado por capas para separar la lógica de negocio, acceso a datos y presentación.
+## Funcionalidades
 
-La aplicación permite gestionar de forma centralizada:
+- Inicio y cierre de sesión. Tras tres intentos fallidos, el formulario de
+  inicio de sesión queda deshabilitado hasta reiniciar la aplicación.
+- Operaciones de alta, consulta, actualización y eliminación de personal,
+  pacientes, citas, medicamentos y recetas.
+- Administración de usuarios, disponible al iniciar sesión con la cuenta
+  administradora predeterminada.
+- En las citas, selección de pacientes y personal desde listas que se
+  actualizan con los registros existentes.
+- En las recetas, selección de paciente, personal médico, cita y medicamento;
+  se comprueba que el paciente y el personal correspondan a la cita elegida.
 
-- Registro de pacientes
-- Búsqueda de pacientes
-- Registro de citas
-- Consulta de historial clínico
-- Acceso a una interfaz principal desde la cual se seleccionan estas acciones
+Los campos de los módulos son:
 
-## Objetivo
+| Módulo | Campos |
+| --- | --- |
+| Personal médico | Nombre, especialidad, teléfono y correo |
+| Pacientes | Nombre, fecha de nacimiento, teléfono y dirección |
+| Citas | Paciente, personal médico, fecha, hora y motivo |
+| Medicamentos | Nombre, presentación, existencia e indicaciones |
+| Registro de diagnóstico (Receta) | Paciente, personal médico, cita y medicamento |
+| Usuarios | Nombre y contraseña |
 
-Brindar una solución simple y funcional para administrar información médica básica dentro de un centro de salud, utilizando una estructura modular que facilita el mantenimiento y la ampliación del sistema.
+## Tecnologías y requisitos
+
+- JDK 21 o posterior. El proyecto configura `javac.source` y `javac.target`
+  como `21` en `nbproject/project.properties`.
+- Apache Ant, incluido normalmente con NetBeans.
+- NetBeans IDE es opcional; el proyecto utiliza su estructura Java/Ant.
+- No requiere una base de datos ni dependencias externas configuradas.
+
+## Compilar, probar y ejecutar
+
+Ejecuta estos comandos desde la carpeta raíz del proyecto, donde se encuentra
+`build.xml`:
+
+```text
+ant compile
+ant test
+ant jar
+ant run
+```
+
+- `ant compile` compila las clases en `build/`.
+- `ant test` ejecuta las pruebas automatizadas definidas en `test/`.
+- `ant jar` genera `dist/SistemaSalud.jar`.
+- `ant run` inicia la aplicación desde Ant.
+
+También puedes abrir la carpeta del proyecto en NetBeans y usar las acciones
+**Build**, **Test** y **Run**. La clase principal es
+`sistemasalud.SistemaSalud`.
+
+Para ejecutar el JAR compilado:
+
+```text
+java -jar dist/SistemaSalud.jar
+```
+
+## Inicio de sesión
+
+Si `datos/usuarios.txt` no existe o está vacío, al iniciar la aplicación se
+crea la cuenta predeterminada:
+
+```text
+Usuario: ADMIN
+Contraseña: ADMIN
+```
+
+Los usuarios existentes no se reemplazan. El módulo **Usuarios** solo está
+habilitado para una sesión cuyos datos sean exactamente `ADMIN` y `ADMIN`.
+Las contraseñas se guardan y se muestran en texto legible en los archivos y en
+la tabla de usuarios; protege el acceso al equipo y a esos archivos.
+
+## Persistencia y formato de los datos
+
+La aplicación guarda los registros en archivos UTF-8 dentro de `datos/`, con
+un registro por línea y campos separados por punto y coma (`;`). Los archivos
+se crean cuando se necesitan:
+
+| Archivo | Contenido por registro |
+| --- | --- |
+| `usuarios.txt` | Nombre de usuario; contraseña |
+| `personal.txt` | Nombre; especialidad; teléfono; correo |
+| `pacientes.txt` | Nombre; fecha de nacimiento; teléfono; dirección |
+| `citas.txt` | Paciente; personal médico; fecha; hora; motivo |
+| `medicamentos.txt` | Nombre; presentación; existencia; indicaciones |
+| `recetas.txt` | Paciente; personal médico; referencia de cita; medicamento |
+
+Los campos son obligatorios y no pueden contener punto y coma ni saltos de
+línea. Las fechas se guardan como `AAAA-MM-DD` y las horas como `HH:mm`.
+Los teléfonos de pacientes y personal médico deben contener de 7 a 15 dígitos;
+se permiten el prefijo `+` y separadores como espacios, guiones, puntos y
+paréntesis.
+Paciente y personal médico se eligen de listas en el formulario de citas; la
+cita guarda sus nombres como referencias. En el formulario de recetas se
+seleccionan los registros existentes de paciente, personal y medicamento, más
+una cita identificada por su ID y sus datos; el sistema comprueba que la cita
+corresponda al paciente y al personal seleccionados.
+
+El ID que muestran las tablas empieza en `0` y corresponde a la posición del
+registro en el archivo. Al eliminar un registro, las posiciones posteriores
+pueden cambiar. Las operaciones de escritura reemplazan el archivo de forma
+atómica cuando el sistema de archivos lo permite.
+
+La ubicación de `datos/` depende de cómo se inicie la aplicación:
+
+- Desde NetBeans o Ant, se usa la carpeta de trabajo actual, normalmente la
+  raíz del proyecto.
+- Desde el JAR, se usa una carpeta `datos/` junto al JAR; por ejemplo,
+  `dist/datos/` para `dist/SistemaSalud.jar`.
+
+Haz copias de seguridad de los archivos de datos antes de moverlos o editar
+su contenido.
 
 ## Estructura del proyecto
 
 ```text
-Proyecto-Lenguajes_Programaci-n-Grupo05/
-├── main.py
-├── README.md
-├── business/
-│   └── __init__.py
-├── data_access/
-│   └── __init__.py
-├── database/
-├── presentation/
-│   ├── __init__.py
-│   ├── assets/
-│   └── views/
-│       ├── index.py
-│       ├── registrar_paciente.py
-│       ├── buscar_paciente.py
-│       ├── registrar_cita.py
-│       └── consultar_historial.py
-└── .gitignore
+SistemaSalud/
+├── src/sistemasalud/          # Punto de entrada de la aplicación
+│   ├── datos/                  # Persistencia y operaciones CRUD
+│   ├── negocio/                # Lógica de sesión y modelos
+│   └── presentacion/           # Formularios Swing
+├── test/                       # Pruebas automatizadas (vacío actualmente)
+├── datos/                      # Archivos locales de datos
+├── capturas/                   # Capturas de pantalla
+├── nbproject/                  # Configuración del proyecto NetBeans
+├── build.xml                   # Tareas de compilación de Ant
+└── manifest.mf                 # Manifest de la aplicación
 ```
 
-## Arquitectura del sistema
+## Capturas
 
-El sistema utiliza una arquitectura organizada por capas, con el propósito de separar las responsabilidades de cada componente y facilitar el mantenimiento y evolución de la aplicación.
+### Inicio de sesión
 
-### Presentación (`presentation/`)
+![Pantalla de inicio de sesión](./capturas/Captura1.png)
 
-Contiene la interfaz gráfica desarrollada con Tkinter. Esta capa permite la interacción del usuario con el sistema mediante las diferentes vistas disponibles, como el registro y búsqueda de pacientes, registro de citas y consulta del historial clínico.
+### Menú principal
 
-### Lógica de negocio (`business/`)
-
-Esta capa concentra las reglas y validaciones relacionadas con los procesos del sistema. Su separación permite mantener la lógica de negocio independiente de la interfaz gráfica.
-
-### Acceso a datos (`data_access/`)
-
-Se encarga de gestionar la comunicación entre la lógica de negocio y la información almacenada. Esta separación permite organizar las operaciones de consulta, registro y actualización de datos.
-
-### Persistencia (`database/`)
-
-Contiene los recursos relacionados con el almacenamiento de la información del sistema, permitiendo centralizar los datos necesarios para la gestión de pacientes, citas y consultas.
-
-Esta organización permite reducir el acoplamiento entre componentes y facilita futuras modificaciones o ampliaciones del sistema.
-
-## Requisitos
-
-- Python 3.8 o superior
-- Tkinter (incluido normalmente con Python)
-- Sistema operativo compatible con tkinter (Windows, Linux o macOS)
-
-## Instalación
-
-1. Clona este repositorio.
-2. Abre una terminal en la carpeta del proyecto.
-3. Verifica que Python esté instalado:
-
-```bash
-python --version
-```
-
-4. Ejecuta la aplicación:
-
-```bash
-python main.py
-```
-
-## Ejecución
-
-Al iniciar la aplicación se muestra una ventana principal con opciones para:
-
-- Registrar paciente
-- Buscar paciente
-- Registrar cita
-- Consultar historial
-
-La interfaz inicial se encuentra en `presentation/views/index.py` y se lanza desde `main.py`.
-
-## Autoría
-
-Proyecto desarrollado por el Grupo 05 de Lenguajes de Programación.
+![Menú principal del sistema](./capturas/Captura2.png)
